@@ -80,6 +80,7 @@
     _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, screenHeight)];
     _tableview.dataSource = self;
     _tableview.delegate = self;
+    //开启分页滑动
     _tableview.pagingEnabled = YES;
     _tableview.estimatedRowHeight = 0;
     _tableview.estimatedSectionFooterHeight = 0;
@@ -124,31 +125,32 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    cell.backgroundColor = [UIColor whiteColor];
-    Movie * mo = _arr[indexPath.row];
+//    cell.backgroundColor = [UIColor whiteColor];
+    //    Movie * mo = _arr[indexPath.row];
     if (indexPath.row == indexNum) {
         [cell.layer addSublayer:self.avView];
     }
     else{
         [cell addSubview:self.imageV];
-        self.imageV.image = [self getVideoFirstViewImage:[NSURL URLWithString:mo.cover]];
+        //        self.imageV.image = [self getVideoFirstViewImage:[NSURL URLWithString:mo.cover]];
+        self.imageV.image = [UIImage imageNamed:@"video"];
     }
     return cell;
 }
-// 获取视频第一帧
-- (UIImage*)getVideoFirstViewImage:(NSURL *)path {
-    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
-    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
-
-    assetGen.appliesPreferredTrackTransform = YES;
-    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
-    NSError *error = nil;
-    CMTime actualTime;
-    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
-    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
-    CGImageRelease(image);
-    return videoImage;
-}
+// 获取视频第一帧图片
+//- (UIImage*)getVideoFirstViewImage:(NSURL *)path {
+//    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
+//    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+//
+//    assetGen.appliesPreferredTrackTransform = YES;
+//    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+//    NSError *error = nil;
+//    CMTime actualTime;
+//    CGImageRef image = [assetGen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+//    UIImage *videoImage = [[UIImage alloc] initWithCGImage:image];
+//    CGImageRelease(image);
+//    return videoImage;
+//}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (fabs(scrollView.contentOffset.y - oldY) > screenHeight) {
