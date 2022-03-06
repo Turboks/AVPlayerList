@@ -21,6 +21,8 @@
     NSInteger screenHeight;
     NSURL * videoUrl;
     BOOL isPlaying;
+    
+    int startNum;
 }
 @property (nonatomic, strong) UITableView * tableview;
 @property (nonatomic, strong) NSMutableArray * arr;
@@ -76,6 +78,7 @@
     oldY = 0;
     screenHeight = self.view.bounds.size.height;
     isPlaying = YES;
+    startNum = 1;
     
     _tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, screenHeight)];
     _tableview.dataSource = self;
@@ -93,12 +96,12 @@
     [self getdata];
 }
 -(void)getdata{
-    NSString *urlString = @"http://c.m.163.com/nc/video/list/V9LG4B3A0/y/1-20.html";
+    NSString *urlString = [NSString stringWithFormat:@"http://c.m.163.com/nc/video/list/V9LG4B3A0/y/%d-%d.html",startNum,startNum + 10];
     AFHTTPSessionManager  *manager = [AFHTTPSessionManager manager];
     [manager GET:urlString parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"获取到数据了");
         NSArray *arr = responseObject[@"V9LG4B3A0"];
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < arr.count; i++) {
             NSDictionary * dic = arr[i];
             Movie *mo = [[Movie alloc]init];
             [mo setValuesForKeysWithDictionary:dic];
@@ -125,14 +128,14 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-//    cell.backgroundColor = [UIColor whiteColor];
+    cell.backgroundColor = [UIColor whiteColor];
     //    Movie * mo = _arr[indexPath.row];
     if (indexPath.row == indexNum) {
         [cell.layer addSublayer:self.avView];
     }
     else{
         [cell addSubview:self.imageV];
-        //        self.imageV.image = [self getVideoFirstViewImage:[NSURL URLWithString:mo.cover]];
+//        self.imageV.image = [self getVideoFirstViewImage:[NSURL URLWithString:mo.cover]];
         self.imageV.image = [UIImage imageNamed:@"video"];
     }
     return cell;
@@ -204,6 +207,8 @@
     
     //提前加载数据
     if (indexNum > self.arr.count - 3) {
+        //连续加载数据
+        startNum += 10;
         [self getdata];
     }
 }
