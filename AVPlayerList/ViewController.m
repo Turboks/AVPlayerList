@@ -140,7 +140,7 @@
     }
     return cell;
 }
-// 获取视频第一帧图片
+// 获取视频第一帧图片、因为获取影响性能、正常是后台传递过来一张图片预加载
 //- (UIImage*)getVideoFirstViewImage:(NSURL *)path {
 //    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:path options:nil];
 //    AVAssetImageGenerator *assetGen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
